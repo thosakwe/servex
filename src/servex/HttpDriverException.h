@@ -17,7 +17,7 @@ namespace servex
     public:
         explicit HttpDriverException(int errorCode, std::string &message);
 
-        const char *what() const override;
+        const char *what() const noexcept override;
 
         const std::string &GetMessage() const;
 

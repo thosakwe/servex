@@ -18,6 +18,10 @@ namespace servex
     public:
         explicit Server(const Driver *driver);
 
+        void AddHandler(const Handler &handler);
+
+        void AddHandler(const Handler &&handler);
+
         void Listen();
 
     private:

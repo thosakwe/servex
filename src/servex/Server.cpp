@@ -11,6 +11,14 @@ servex::Server::Server(const servex::Driver *driver) {
     this->driver = driver;
 }
 
+void servex::Server::AddHandler(const servex::Handler &handler) {
+    handlers.push_back(handler);
+}
+
+void servex::Server::AddHandler(const servex::Handler &&handler) {
+    handlers.push_back(handler);
+}
+
 void servex::Server::Listen() {
     while (!driver->IsDone()) {
         auto &client = driver->Accept();

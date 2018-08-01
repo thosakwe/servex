@@ -7,10 +7,10 @@
 #include "HttpDriverException.h"
 
 servex::HttpDriverException::HttpDriverException(int errorCode, std::string &message) : errorCode(errorCode),
-                                                                                    message(message) {
+                                                                                        message(message) {
 }
 
-const char *servex::HttpDriverException::what() const {
+const char *servex::HttpDriverException::what() const noexcept {
     return message.c_str();
 }
 

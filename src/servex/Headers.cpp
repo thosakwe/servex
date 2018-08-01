@@ -15,7 +15,7 @@ servex::Headers::Headers(const servex::Headers &other) {
     }
 }
 
-servex::Headers::Headers(const servex::Headers &&other) {
+servex::Headers::Headers(const servex::Headers &&other) noexcept {
     if (this != &other) {
         headers.insert(other.headers.begin(), other.headers.end());
     }
@@ -31,7 +31,18 @@ const std::vector<std::string> &servex::Headers::Get(const std::string &name) co
     if (Contains(name)) {
         return headers.at(name);
     } else {
-        // TODO
+        std::vector<std::string> emptyVector;
+        return std::move(emptyVector);
+    }
+}
+
+std::vector<std::string> &servex::Headers::GetMutable(const std::string &name) {
+    if (Contains(name)) {
+        return headers.at(name);
+    } else {
+        std::vector<std::string> emptyVector;
+        headers.insert(std::make_pair(name, emptyVector));
+        return GetMutable(name);
     }
 }
 
@@ -49,11 +60,11 @@ std::string servex::Headers::Join(const std::string &name) const {
 }
 
 void servex::Headers::Add(const std::string &name, const std::string &value) {
-    Get(name).push_back(value);
+    GetMutable(name).push_back(value);
 }
 
 void servex::Headers::Overwrite(const std::string &name, const std::string &value) {
-    auto &values = Get(name);
+    auto &values = GetMutable(name);
     values.clear();
     values.push_back(value);
 }

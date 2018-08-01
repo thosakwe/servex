@@ -1,3 +1,2 @@
-add_executable(example_hello
-        HelloHandler.cpp HelloHandler.h)
+add_executable(example_hello HelloHandler.cpp HelloHandler.h main.cpp)
 target_link_libraries(example_hello servex)

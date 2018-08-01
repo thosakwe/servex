@@ -25,6 +25,8 @@ namespace servex
 
         const std::vector<std::string> &Get(const std::string &name) const;
 
+       std::vector<std::string> &GetMutable(const std::string &name);
+
         std::string Join(const std::string &name) const;
 
         void Add(const std::string &name, const std::string &value);
