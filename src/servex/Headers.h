@@ -15,11 +15,17 @@ namespace servex
 {
     class Headers
     {
+        Headers();
+
+        Headers(const Headers &other);
+
+        Headers(const Headers &&other) noexcept;
+
         bool Contains(const std::string &name) const;
 
         const std::vector<std::string> &Get(const std::string &name) const;
 
-        std::string Concat(const std::string &name) const;
+        std::string Join(const std::string &name) const;
 
         void Add(const std::string &name, const std::string &value);
 
@@ -28,7 +34,7 @@ namespace servex
         void Clear();
 
     private:
-        std::vector<std::string, std::vector<std::string>> headers;
+        std::unordered_map<std::string, std::vector<std::string>> headers;
     };
 }
 

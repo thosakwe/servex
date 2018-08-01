@@ -7,12 +7,13 @@
 #ifndef SERVEX_SERVEX_H
 #define SERVEX_SERVEX_H
 
+#include "Driver.h"
 #include "Handler.h"
 #include "Headers.h"
 #include "HttpDriver.h"
+#include "HttpException.h"
 #include "Request.h"
 #include "Response.h"
-#include "ResponseBody.h"
 #include "Server.h"
 
 #endif //SERVEX_SERVEX_H

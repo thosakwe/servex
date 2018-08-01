@@ -4,19 +4,17 @@
 //
 // Use of this source code is governed by an
 // MIT-style license that can be found in the LICENSE file.
-#ifndef SERVEX_HTTPDRIVER_H
-#define SERVEX_HTTPDRIVER_H
+#ifndef SERVEX_HTTPEXCEPTION_H
+#define SERVEX_HTTPEXCEPTION_H
 
-#include <mutex>
-#include "Driver.h"
+#include <stdexcept>
 
 namespace servex
 {
-    class HttpDriver
+    class HttpException : public std::exception
     {
-    private:
-        std::mutex serverLock;
+
     };
 }
 
-#endif //SERVEX_HTTPDRIVER_H
+#endif //SERVEX_HTTPEXCEPTION_H

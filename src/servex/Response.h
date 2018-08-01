@@ -7,8 +7,8 @@
 #ifndef SERVEX_RESPONSE_H
 #define SERVEX_RESPONSE_H
 
+#include <ostream>
 #include "Headers.h"
-#include "ResponseBody.h"
 
 namespace servex
 {
@@ -19,13 +19,13 @@ namespace servex
 
         Headers &GetHeaders();
 
-        ResponseBody &GetBody();
+        std::ostream &GetBody();
 
         void SetStatus(int status);
 
     private:
         int status = 200;
-        ResponseBody body;
+        std::ostream body;
         Headers headers;
     };
 }

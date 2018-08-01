@@ -13,13 +13,14 @@ set(SERVEX_VERSION ${_SERVEX_VERSION})
 message(STATUS "Servex version: ${SERVEX_VERSION}")
 
 set(servex_srcs
+        Driver.cpp Driver.h
         Handler.cpp Handler.h
         Headers.cpp Headers.h
         HttpDriver.cpp HttpDriver.h
+        HttpException.cpp HttpException.h
         Injector.cpp Injector.h
         Request.cpp Request.h
         Response.cpp Response.h
-        ResponseBody.cpp ResponseBody.h
         Server.cpp Server.h
         servex.h)
 

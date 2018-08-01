@@ -13,8 +13,10 @@ namespace hello
 {
     class HelloHandler : public servex::Handler
     {
-        bool CanAccept(const servex::Request &request) const override;
+    public:
+        bool CanAccept(const servex::Client &client) const override;
 
+    private:
         void Handle(const servex::Request &request, servex::Response &response) override;
     };
 }

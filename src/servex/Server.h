@@ -9,15 +9,19 @@
 
 #include <vector>
 #include "Handler.h"
-#include "HttpDriver.h"
+#include "Driver.h"
 
 namespace servex
 {
     class Server
     {
     public:
-        void Listen(HttpDriver &driver);
+        explicit Server(const Driver *driver);
+
+        void Listen();
+
     private:
+        const Driver *driver;
         std::vector<Handler> handlers;
     };
 }

@@ -7,6 +7,7 @@
 #ifndef SERVEX_HANDLER_H
 #define SERVEX_HANDLER_H
 
+#include "Driver.h"
 #include "Request.h"
 #include "Response.h"
 
@@ -14,9 +15,19 @@ namespace servex
 {
     class Handler
     {
-        virtual bool CanAccept(const Request &request) const = 0;
+    public:
+        virtual bool CanAccept(const Client &client) const = 0;
 
         virtual void Handle(const Request &request, Response &response) = 0;
+
+        /**
+         * Transforms an accepted client into another representation of incoming data.
+         *
+         * Allows you to "wrap" functionality, i.e. for compression, etc.
+         * @param client
+         * @return Returns a new request and response, OR the current values.
+         */
+        virtual Client &Transform(Client &client);
     };
 }
 
