@@ -4,8 +4,11 @@
 //
 // Use of this source code is governed by an
 // MIT-style license that can be found in the LICENSE file.
+#include "http_parser.h"
 #include "HttpDriver.h"
 #include "HttpDriverException.h"
+#include "HttpRequest.h"
+#include "HttpResponse.h"
 
 void servex::HttpDriver::BindIpv4(const sockaddr_in &address, int backlog) {
     sockfd = socket(AF_INET, SOCK_STREAM, IPPROTO_TCP);
@@ -47,11 +50,26 @@ void servex::HttpDriver::Bind(const sockaddr *address, int backlog) {
     }
 }
 
-bool servex::HttpDriver::IsDone() const {
+servex::Client &servex::HttpDriver::Accept(bool *success) {
     // TODO: Save last acceptance
-    //int lastSocket = accept(sockfd);
-}
+    ClientInfo info{};
+    int lastSocket = accept(sockfd, &info.address, &info.length);
 
-servex::Client &servex::HttpDriver::Accept() const {
-    return <#initializer#>;
+    if (lastSocket < 0) {
+        *success = false;
+    } else {
+        info.sockfd = lastSocket;
+        *success = true;
+    }
+
+    HttpRequest request(info);
+    HttpResponse response(info);
+
+    http_parser parser;
+    parser.data = &request;
+
+    http_parser_settings settings;
+
+    Client client{request, response};
+    return client;
 }

@@ -16,7 +16,7 @@ namespace servex
     class Server
     {
     public:
-        explicit Server(const Driver *driver);
+        explicit Server(Driver *driver);
 
         void AddHandler(const Handler &handler);
 
@@ -25,7 +25,7 @@ namespace servex
         void Listen();
 
     private:
-        const Driver *driver;
+        Driver *driver;
         std::vector<Handler> handlers;
     };
 }

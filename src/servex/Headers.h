@@ -19,7 +19,7 @@ namespace servex
 
         Headers(const Headers &other);
 
-        Headers(const Headers &&other) noexcept;
+        Headers(Headers &&other) noexcept;
 
         bool Contains(const std::string &name) const;
 

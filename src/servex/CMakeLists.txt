@@ -16,9 +16,13 @@ set(servex_srcs
         Driver.cpp Driver.h
         Handler.cpp Handler.h
         Headers.cpp Headers.h
-        HttpDriver.cpp HttpDriver.h
-        HttpException.cpp HttpException.h
-        HttpDriverException.cpp HttpDriverException.h
+        http/http.h
+        http/http_parser.c http/http_parser.h
+        http/HttpDriver.cpp http/HttpDriver.h
+        http/HttpRequest.cpp http/HttpRequest.h
+        http/HttpResponse.cpp http/HttpResponse.h
+        InternalServerError.cpp InternalServerError.h
+        http/HttpDriverException.cpp http/HttpDriverException.h
         Injector.cpp Injector.h
         net.h
         Request.cpp Request.h

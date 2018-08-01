@@ -7,10 +7,9 @@
 #ifndef SERVEX_HTTPDRIVER_H
 #define SERVEX_HTTPDRIVER_H
 
-#include <deque>
 #include <mutex>
-#include "Driver.h"
-#include "net.h"
+#include "../Driver.h"
+#include "../net.h"
 
 namespace servex
 {
@@ -21,9 +20,14 @@ namespace servex
 
         void BindIpV6(const sockaddr_in6 &address, int backlog = SOMAXCONN);
 
-        bool IsDone() const override;
+        Client &Accept(bool *success) override;
 
-        Client &Accept() const override;
+        struct ClientInfo
+        {
+            int sockfd;
+            sockaddr address;
+            socklen_t length;
+        };
 
     private:
         std::mutex serverLock;

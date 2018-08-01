@@ -15,7 +15,7 @@ servex::Headers::Headers(const servex::Headers &other) {
     }
 }
 
-servex::Headers::Headers(const servex::Headers &&other) noexcept {
+servex::Headers::Headers(servex::Headers &&other) noexcept {
     if (this != &other) {
         headers.insert(other.headers.begin(), other.headers.end());
     }
