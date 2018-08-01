@@ -15,6 +15,7 @@ namespace servex
 {
     class Headers
     {
+    public:
         Headers();
 
         Headers(const Headers &other);
@@ -25,7 +26,9 @@ namespace servex
 
         const std::vector<std::string> &Get(const std::string &name) const;
 
-       std::vector<std::string> &GetMutable(const std::string &name);
+        const std::vector<std::string> GetKeys() const;
+
+        std::vector<std::string> &GetMutable(const std::string &name);
 
         std::string Join(const std::string &name) const;
 

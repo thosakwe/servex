@@ -36,6 +36,16 @@ const std::vector<std::string> &servex::Headers::Get(const std::string &name) co
     }
 }
 
+const std::vector<std::string> servex::Headers::GetKeys() const {
+    std::vector<std::string> keys;
+
+    for (auto &pair : headers) {
+        keys.push_back(pair.first);
+    }
+
+    return keys;
+}
+
 std::vector<std::string> &servex::Headers::GetMutable(const std::string &name) {
     if (Contains(name)) {
         return headers.at(name);

@@ -17,7 +17,7 @@ namespace hello
         bool CanAccept(const servex::Client &client) const override;
 
     private:
-        void Handle(const servex::Request &request, servex::Response &response) override;
+        void Handle(const servex::Request &request, servex::Response &response) const override;
     };
 }
 

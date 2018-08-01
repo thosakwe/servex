@@ -7,34 +7,41 @@
 #include "InternalServerError.h"
 #include "Server.h"
 
+using namespace servex;
+
 servex::Server::Server(servex::Driver *driver) {
     this->driver = driver;
 }
 
-void servex::Server::AddHandler(const servex::Handler &handler) {
-    handlers.push_back(handler);
-}
-
-void servex::Server::AddHandler(const servex::Handler &&handler) {
+void servex::Server::AddHandler(const servex::Handler *handler) {
     handlers.push_back(handler);
 }
 
 void servex::Server::Listen() {
     bool success = true;
-    do {
-        auto &client = driver->Accept(&success);
+    while (!driver->IsDone()) {
+        try {
 
-        if (success) {
-            try {
+            auto _client = driver->Accept(&success);
+
+            if (success) {
+                auto *client = &_client;
                 for (auto &handler : handlers) {
-                    if (handler.CanAccept(client)) {
-                        client = handler.Transform(client);
-                        handler.Handle(client.request, client.response);
+                    if (handler->CanAccept(*client)) {
+                        auto *old = client;
+                        client = handler->Transform(client);
+
+                        if (old != client) {
+                            // TODO: Handle new destructor, etc.
+                            delete old;
+                        }
+
+                        handler->Handle(client->request, client->response);
                     }
                 }
-            } catch (HttpException &exc) {
-                // TODO: Handle this
             }
+        } catch (HttpException &exc) {
+            // TODO: Handle this
         }
-    } while (success);
+    }
 }

@@ -21,7 +21,9 @@ namespace servex
     class Driver
     {
     public:
-        virtual Client &Accept(bool *success) = 0;
+        virtual bool IsDone() const = 0;
+
+        virtual Client Accept(bool *success) = 0;
     };
 }
 

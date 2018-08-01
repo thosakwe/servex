@@ -25,7 +25,7 @@ namespace servex
 
     private:
         int status = 200;
-        std::ostream body;
+        std::ostream* body;
         Headers headers;
     };
 }

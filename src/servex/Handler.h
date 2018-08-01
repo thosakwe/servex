@@ -18,7 +18,7 @@ namespace servex
     public:
         virtual bool CanAccept(const Client &client) const = 0;
 
-        virtual void Handle(const Request &request, Response &response) = 0;
+        virtual void Handle(const Request &request, Response &response) const = 0;
 
         /**
          * Transforms an accepted client into another representation of incoming data.
@@ -27,7 +27,7 @@ namespace servex
          * @param client
          * @return Returns a new request and response, OR the current values.
          */
-        virtual Client &Transform(Client &client);
+        virtual Client *Transform(Client *client) const;
     };
 }
 

@@ -15,7 +15,7 @@ servex::Headers &servex::Response::GetHeaders() {
 }
 
 std::ostream &servex::Response::GetBody() {
-    return body;
+    return *body;
 }
 
 void servex::Response::SetStatus(int status) {

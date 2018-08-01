@@ -20,7 +20,9 @@ namespace servex
 
         void BindIpV6(const sockaddr_in6 &address, int backlog = SOMAXCONN);
 
-        Client &Accept(bool *success) override;
+        bool IsDone() const override;
+
+        Client Accept(bool *success) override;
 
         struct ClientInfo
         {

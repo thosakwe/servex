@@ -23,15 +23,17 @@ int main() {
     try {
         driver->BindIpv4(address);
 
-        std::vector<std::thread> threads;
+        std::vector<std::thread*> threads;
 
         for (unsigned int i = 0; i < std::thread::hardware_concurrency(); i++) {
-            std::thread thread(threadMain, driver);
+            auto * thread = new std::thread(threadMain, driver);
             threads.push_back(thread);
         }
 
+        std::cout << "Listening at http://127.0.0.1:3000" << std::endl;
+
         for (auto &thread : threads) {
-            thread.join();
+            thread->join();
         }
 
         return 0;
@@ -43,6 +45,6 @@ int main() {
 
 void threadMain(const std::shared_ptr<HttpDriver> &driver) {
     Server server(driver.get());
-    server.AddHandler(hello::HelloHandler());
+    server.AddHandler(new hello::HelloHandler());
     server.Listen();
 }

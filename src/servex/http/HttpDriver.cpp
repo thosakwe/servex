@@ -4,6 +4,8 @@
 //
 // Use of this source code is governed by an
 // MIT-style license that can be found in the LICENSE file.
+#include <iostream>
+#include <stack>
 #include "http_parser.h"
 #include "HttpDriver.h"
 #include "HttpDriverException.h"
@@ -50,7 +52,14 @@ void servex::HttpDriver::Bind(const sockaddr *address, int backlog) {
     }
 }
 
-servex::Client &servex::HttpDriver::Accept(bool *success) {
+const char *copyString(const char *str, size_t length) {
+    auto *s = new char[length + 1];
+    memcpy(s, str, length);
+    s[length] = 0;
+    return s;
+}
+
+servex::Client servex::HttpDriver::Accept(bool *success) {
     // TODO: Save last acceptance
     ClientInfo info{};
     int lastSocket = accept(sockfd, &info.address, &info.length);
@@ -65,11 +74,89 @@ servex::Client &servex::HttpDriver::Accept(bool *success) {
     HttpRequest request(info);
     HttpResponse response(info);
 
+    std::stack<std::string> headerStack;
+
     http_parser parser;
-    parser.data = &request;
+    http_parser_init(&parser, HTTP_REQUEST);
 
     http_parser_settings settings;
 
-    Client client{request, response};
+    typedef struct
+    {
+        HttpRequest *request;
+        HttpResponse *response;
+        std::stack<std::string> *headerStack;
+    } ParseState;
+
+    ParseState state;
+    parser.data = &state;
+    state.request = &request;
+    state.response = &response;
+    state.headerStack = &headerStack;
+
+    // TODO: Other callbacks
+
+    settings.on_header_field = [](http_parser *parser, const char *msg, size_t length) {
+        auto *state = (ParseState *) parser->data;
+        auto s = copyString(msg, length);
+        state->headerStack->push(s);
+        return 0;
+    };
+
+    settings.on_header_value = [](http_parser *parser, const char *msg, size_t length) {
+        auto *state = (ParseState *) parser->data;
+        if (!state->headerStack->empty()) {
+            auto &key = state->headerStack->top();
+            auto value = copyString(msg, length);
+            state->headerStack->pop();
+            std::cout << key << " => " << value << std::endl;
+            state->request->GetMutableHeaders().Add(key, value);
+        }
+
+        return 0;
+    };
+
+    unsigned int isUpgrade = 0;
+    size_t len = 100 * 1024, nparsed;
+    char buf[len];
+    ssize_t recved;
+    memset(buf, 0, len);
+
+    //std::cout << "start" << std::endl;
+    while ((recved = recv(info.sockfd, buf, len, 0)) >= 0)
+    {
+        if (isUpgrade)
+        {
+            //send_string(&parser, buf, (size_t)recved, 7, true);
+        }
+        else
+        {
+            /* Start up / continue the parser.
+             * Note we pass recved==0 to signal that EOF has been received.
+             */
+            nparsed = http_parser_execute(&parser, &settings, buf, (size_t)recved);
+
+            if ((isUpgrade = parser.upgrade) == 1)
+            {
+                //send_notification(&parser, 6);
+            }
+            else if (nparsed != recved)
+            {
+                //std::cout << "Hm what" << std::endl;
+                close(info.sockfd);
+
+                // TODO: Throw an exception? Display an error? etc.?
+                *success = false;
+            }
+        }
+
+        memset(buf, 0, len);
+    }
+
+    Client client = {request, response};
     return client;
+}
+
+bool servex::HttpDriver::IsDone() const {
+    return false;
 }

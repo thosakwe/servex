@@ -6,6 +6,6 @@
 // MIT-style license that can be found in the LICENSE file.
 #include "Handler.h"
 
-servex::Client &servex::Handler::Transform(servex::Client &client) {
+servex::Client * servex::Handler::Transform(Client *client) const {
     return client;
 }

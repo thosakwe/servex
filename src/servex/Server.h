@@ -18,15 +18,13 @@ namespace servex
     public:
         explicit Server(Driver *driver);
 
-        void AddHandler(const Handler &handler);
-
-        void AddHandler(const Handler &&handler);
+        void AddHandler(const Handler *handler);
 
         void Listen();
 
     private:
         Driver *driver;
-        std::vector<Handler> handlers;
+        std::vector<const Handler*> handlers;
     };
 }
 
