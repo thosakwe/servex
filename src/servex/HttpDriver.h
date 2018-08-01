@@ -7,15 +7,29 @@
 #ifndef SERVEX_HTTPDRIVER_H
 #define SERVEX_HTTPDRIVER_H
 
+#include <deque>
 #include <mutex>
 #include "Driver.h"
+#include "net.h"
 
 namespace servex
 {
-    class HttpDriver
+    class HttpDriver : public Driver
     {
+    public:
+        void BindIpv4(const sockaddr_in &address, int backlog = SOMAXCONN);
+
+        void BindIpV6(const sockaddr_in6 &address, int backlog = SOMAXCONN);
+
+        bool IsDone() const override;
+
+        Client &Accept() const override;
+
     private:
         std::mutex serverLock;
+        int sockfd;
+
+        void Bind(const sockaddr *address, int backlog);
     };
 }
 

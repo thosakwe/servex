@@ -18,7 +18,9 @@ set(servex_srcs
         Headers.cpp Headers.h
         HttpDriver.cpp HttpDriver.h
         HttpException.cpp HttpException.h
+        HttpDriverException.cpp HttpDriverException.h
         Injector.cpp Injector.h
+        net.h
         Request.cpp Request.h
         Response.cpp Response.h
         Server.cpp Server.h
